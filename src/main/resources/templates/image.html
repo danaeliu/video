@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>图片生成器</title>
+    <link rel="stylesheet" href="/css/aa.css">
+</head>
+<body>
+<div class="container">
+    <h1>图片生成器</h1>
+
+    <form id="imageForm">
+        <div class="form-group">
+            <label>宽度（50-5000像素）:</label>
+            <input type="number" name="width" required min="50" max="5000" value="800">
+        </div>
+
+        <div class="form-group">
+            <label>高度（50-5000像素）:</label>
+            <input type="number" name="height" required min="50" max="5000" value="600">
+        </div>
+
+        <div class="form-group">
+            <label>文字内容:</label>
+            <input type="text" name="text" required value="示例文字">
+        </div>
+
+        <div class="form-group color-picker">
+            <label>文字颜色:</label>
+            <input type="color" name="textColor" value="#ffffff">
+            <input type="text" class="color-input" value="#ffffff">
+        </div>
+
+        <div class="form-group color-picker">
+            <label>背景颜色:</label>
+            <input type="color" name="bgColor" value="#333333">
+            <input type="text" class="color-input" value="#333333">
+        </div>
+
+        <div class="form-group">
+            <label>图片格式:</label>
+            <select name="format">
+                <option value="PNG">PNG</option>
+                <option value="JPG">JPG</option>
+            </select>
+        </div>
+
+        <button type="submit">生成图片</button>
+    </form>
+
+    <div id="resultArea" class="hidden">
+        <div class="preview-container">
+            <img id="previewImage" src="" alt="图片预览">
+        </div>
+        <a id="downloadBtn" class="btn" href="#">下载图片</a>
+        <div id="errorMsg" class="error"></div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // 颜色选择器同步
+        document.querySelectorAll('.color-picker').forEach(group => {
+            const colorInput = group.querySelector('input[type="color"]');
+            const textInput = group.querySelector('.color-input');
+
+            colorInput.addEventListener('input', () => {
+                textInput.value = colorInput.value;
+            });
+
+            textInput.addEventListener('input', () => {
+                colorInput.value = textInput.value.startsWith('#') ?
+                    textInput.value : '#' + textInput.value;
+            });
+        });
+
+        // 表单提交
+        document.getElementById('imageForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const params = new URLSearchParams(formData);
+
+            try {
+                const response = await fetch('/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: params
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    showError(data.error);
+                } else {
+                    showResult(data.previewUrl, data.downloadUrl);
+                }
+            } catch (err) {
+                showError('服务器连接失败');
+            }
+        });
+    });
+
+    function showResult(previewUrl, downloadUrl) {
+        const resultArea = document.getElementById('resultArea');
+        const img = document.getElementById('previewImage');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        img.src = previewUrl + '?t=' + Date.now(); // 避免缓存
+        downloadBtn.href = downloadUrl;
+        resultArea.classList.remove('hidden');
+        document.getElementById('errorMsg').textContent = '';
+    }
+
+    function showError(msg) {
+        document.getElementById('errorMsg').textContent = msg;
+        document.getElementById('resultArea').classList.add('hidden');
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+/* 基础布局与容器 */
+/* 主容器改为 Flex 布局 */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    gap: 40px; /* 左右间距 */
+}
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    #imageForm, #resultArea {
+        width: 100%;
+    }
+}
+
+/* 表单区域 */
+#imageForm {
+    flex: 0 0 50%; /* 占50%宽度 */
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #495057;
+}
+
+input[type="number"],
+input[type="text"],
+select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+/* 颜色选择器交互 */
+.color-picker {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+input[type="color"] {
+    width: 40px;
+    height: 40px;
+    padding: 2px;
+    cursor: pointer;
+}
+
+.color-input {
+    flex: 1;
+    padding: 0.5rem;
+}
+
+/* 图片预览区域 */
+#resultArea {
+    position: sticky;
+    top: 20px;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    flex: 1;
+    position: sticky;
+}
+
+.preview-container {
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+#previewImage {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+/* 按钮与交互 */
+button[type="submit"],
+.btn {
+    background: #007bff;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button[type="submit"]:hover {
+    background: #0056b3;
+}
+
+/*!* 错误提示 *!*/
+/*.error {*/
+/*    color: #dc3545;*/
+/*    padding: 10px;*/
+/*    margin-top: 1rem;*/
+/*    border-radius: 4px;*/
+/*    background: #f8d7da;*/
+/*    border: 1px solid #f5c6cb;*/
+/*}*/
+
+.hidden {
+    display: none;
+}

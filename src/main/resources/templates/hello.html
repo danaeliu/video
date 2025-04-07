@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>示例页面</title>
+</head>
+<body>
+<!-- 显示文本 -->
+<h1 th:text="${message}"></h1>
+
+<!-- 遍历列表 -->
+<ul>
+  <li th:each="user : ${userList}" th:text="${user}"></li>
+</ul>
+
+<!-- 条件判断（示例） -->
+<div th:if="${not #lists.isEmpty(userList)}">
+  <p>共有用户：<span th:text="${#lists.size(userList)}"></span>人</p>
+</div>
+</body>
+</html>
